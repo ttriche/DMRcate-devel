@@ -10,7 +10,7 @@
 #'
 prepMvals <- function(grset, cutoff=10, returnBetas=FALSE) { 
 
-  CpGs <- grep("^cg", rownames(grset))
+CpGs <- grep("^cg", rownames(grset)) # Getting the row location of all the CpG dinucleotides
   if (is(grset, "RangedSummarizedExperiment")) {
     xx <- prepM(rmSNPandCH(logit2(assays(grset)$Beta)[CpGs, ]))
   } else { 

@@ -2,10 +2,12 @@
 #'  
 #' @param an object of class dmrcate.output
 #'
+#' @import scales
+#' 
 #' @export
 print.dmrcate.output <- function(object) { 
   cat("Object of class", class(object), "\n\n")
   cat("  Input data:", nrow(object$input), "features\n")
   cat("     Results:", nrow(object$results), "DMRs\n")
-  cat("      Cutoff: p < ", object$cutoff, "\n")
+  cat("     Cutoffs: p <", paste(scientific(object$cutoff), collapse=", "),"\n")
 }

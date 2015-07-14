@@ -16,7 +16,7 @@ prepM <- function(M, cutoff=10) {
   }
 
   ## get rid of +/-Inf cells
-  M[ which(M > cutoff) ] <- cutoff
+  M[ which(M > cutoff) ] <- cutoff 
   M[ which(M < -1 * cutoff) ] <- -1 * cutoff
 
   ## impute NAs via k-NN
