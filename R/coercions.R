@@ -1,6 +1,4 @@
 ## the crux of these manipulations: make an array directly comparable to RNAseq
-setAs("ExpressionSet", "SummarizedExperiment", 
-      function(from) eSetToSE(from)) 
 setMethod("exprs","SummarizedExperiment", 
           function(object) assays(object)$exprs)
 setMethod("pData", "SummarizedExperiment", 
