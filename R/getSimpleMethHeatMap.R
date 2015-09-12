@@ -1,9 +1,15 @@
-getSimpleMethHeatMap <- function(x, k=100, scale="none", asSNPs=F, binary=F,
-                                 ColSideColors=NULL, rotate=F, distm="jaccard",
-                                 ...){
-
-  ## for DNA methylation data, this works well
-  ward <- function(x) hclust(x, method="ward")
+#' pretty much what it says
+#'
+#' @param x   a matrix, GenomicRatioSet, or other rectangular object
+#' @param k   choose the top [this many] features by SD
+#'
+#' @return invisibly, the same thing as Heatmap(...)
+#'
+#' @import ComplexHeatmap
+#'
+#' @export
+getSimpleMethHeatMap <- function(x, k=100, asSNPs=F, binary=F,
+                                 ColSideColors=NULL, rotate=F, ...) {
 
   if(is(x, "SummarizedExperiment") || is(x, "RangedSummarizedExperiment")){ #{{{
     x <- keepSeqlevels(x, paste0("chr", 1:22))
@@ -30,25 +36,42 @@ getSimpleMethHeatMap <- function(x, k=100, scale="none", asSNPs=F, binary=F,
     xx <- x[head(rowordering, k), ]
   } # }}}
   if(asSNPs != TRUE) { # {{{
-    jet <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", 
-                              "yellow", "#FF7F00", "red", "#7F0000")) # }}}
-  } else { ## {{{ as SNPs 
+    cfun <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", 
+                               "yellow", "#FF7F00", "red", "#7F0000")) # }}}
+  } else { # {{{ as SNPs 
     xx <- round(xx * 2)
-    jet <- colorRampPalette(c("blue","yellow","red"))
+    cfun <- colorRampPalette(c("blue","yellow","red"))
   } # }}}
 
   if (rotate == TRUE && !is.null(ColSideColors)) { # {{{
-    hfun <- function(X) 
-      heatmap(X, col=jet(64), scale=scale, hclustfun=ward,
-              RowSideColors=ColSideColors, ...) # }}}
+    hfun <- function(X) {
+      Heatmap(X, col=cfun(64),
+              clustering_method_rows="ward",
+              clustering_method_columns="ward",
+              clustering_distance_rows="binary",
+              clustering_distance_columns="binary",
+              # RowSideColors=ColSideColors, 
+              ...) 
+    } # }}}
   } else if (rotate != TRUE && !is.null(ColSideColors)) { # {{{
-    hfun <- function(X)
-      heatmap(X, col=jet(64), scale=scale, hclustfun=ward,
-              ColSideColors=ColSideColors, ...) # }}}
+    hfun <- function(X) {
+      Heatmap(X, col=cfun(64),
+              clustering_method_rows="ward",
+              clustering_method_columns="ward",
+              clustering_distance_rows="manhattan",
+              clustering_distance_columns="manhattan",
+              # ColSideColors=ColSideColors, 
+              ...) 
+    } # }}}
   } else { # {{{
-     hfun <- function(X, ...) 
-      heatmap(X, col=jet(64), scale=scale, hclustfun=ward,
+    hfun <- function(X, ...) {
+      Heatmap(X, col=cfun(64),
+              clustering_method_rows="ward",
+              clustering_method_columns="ward",
+              clustering_distance_rows="manhattan",
+              clustering_distance_columns="manhattan",
               ...)
+    } # }}}
   } # }}}
 
   X <- xx 
