@@ -30,9 +30,6 @@ getSimpleMethHeatMap <- function(x, k=100, asSNPs=F, binary=F, rotate=F,
       names(sds) <- rownames(x)
       rowordering <- names(sds)[order(sds, decreasing=TRUE)]
       xx <- getBeta(x)[head(rowordering, k), ]
-    }
-    if("indicator" %in% names(colData(x)) && is.null(ColSideColors)) {
-      ColSideColors <- x$indicator
     } # }}}
   } else { # {{{
     sds <- rowSds(data.matrix(x))
@@ -47,37 +44,13 @@ getSimpleMethHeatMap <- function(x, k=100, asSNPs=F, binary=F, rotate=F,
     cfun <- colorRampPalette(c("blue","yellow","red"))
   } # }}}
 
-  if (rotate == TRUE && !is.null(ColSideColors)) { # {{{
-    hfun <- function(X) {
-      Heatmap(X, col=cfun(255),
-              clustering_method_rows=clustering_method_rows,
-              clustering_method_columns=clustering_method_columns,
-              clustering_distance_rows=clustering_distance_rows,
-              clustering_distance_columns=clustering_distance_columns,
-              ...) 
-    } # }}}
-  } else if (rotate != TRUE && !is.null(ColSideColors)) { # {{{
-    hfun <- function(X) {
-      Heatmap(X, col=cfun(255),
-              clustering_method_rows=clustering_method_rows,
-              clustering_method_columns=clustering_method_columns,
-              clustering_distance_rows=clustering_distance_rows,
-              clustering_distance_columns=clustering_distance_columns,
-              ...) 
-    } # }}}
-  } else { # {{{
-    hfun <- function(X, ...) {
-      Heatmap(X, col=cfun(255),
-              clustering_method_rows=clustering_method_rows,
-              clustering_method_columns=clustering_method_columns,
-              clustering_distance_rows=clustering_distance_rows,
-              clustering_distance_columns=clustering_distance_columns,
-              ...)
-    } # }}}
-  } # }}}
-
   X <- xx 
   if (rotate) X <- t(X)
-  hfun(X, ...)
+  Heatmap(X, col=cfun(255),
+          clustering_method_rows=clustering_method_rows,
+          clustering_method_columns=clustering_method_columns,
+          clustering_distance_rows=clustering_distance_rows,
+          clustering_distance_columns=clustering_distance_columns,
+          ...) 
 
 }
