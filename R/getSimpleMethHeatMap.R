@@ -1,4 +1,4 @@
-#' pretty much what it says
+#' pretty much what it says, except that (ironically) it calls ComplexHeatmap
 #'
 #' @param x   a matrix, GenomicRatioSet, or other rectangular object
 #' @param k   choose the top [this many] features by SD
@@ -8,8 +8,12 @@
 #' @import ComplexHeatmap
 #'
 #' @export
-getSimpleMethHeatMap <- function(x, k=100, asSNPs=F, binary=F,
-                                 ColSideColors=NULL, rotate=F, ...) {
+getSimpleMethHeatMap <- function(x, k=100, asSNPs=F, binary=F, rotate=F, 
+                                 clustering_method_rows="ward",
+                                 clustering_method_columns="ward",
+                                 clustering_distance_rows="binary",
+                                 clustering_distance_columns="binary",
+                                 ...) {
 
   if(is(x, "SummarizedExperiment") || is(x, "RangedSummarizedExperiment")){ #{{{
     x <- keepSeqlevels(x, paste0("chr", 1:22))
@@ -45,31 +49,29 @@ getSimpleMethHeatMap <- function(x, k=100, asSNPs=F, binary=F,
 
   if (rotate == TRUE && !is.null(ColSideColors)) { # {{{
     hfun <- function(X) {
-      Heatmap(X, col=cfun(64),
-              clustering_method_rows="ward",
-              clustering_method_columns="ward",
-              clustering_distance_rows="binary",
-              clustering_distance_columns="binary",
-              # RowSideColors=ColSideColors, 
+      Heatmap(X, col=cfun(255),
+              clustering_method_rows=clustering_method_rows,
+              clustering_method_columns=clustering_method_columns,
+              clustering_distance_rows=clustering_distance_rows,
+              clustering_distance_columns=clustering_distance_columns,
               ...) 
     } # }}}
   } else if (rotate != TRUE && !is.null(ColSideColors)) { # {{{
     hfun <- function(X) {
-      Heatmap(X, col=cfun(64),
-              clustering_method_rows="ward",
-              clustering_method_columns="ward",
-              clustering_distance_rows="manhattan",
-              clustering_distance_columns="manhattan",
-              # ColSideColors=ColSideColors, 
+      Heatmap(X, col=cfun(255),
+              clustering_method_rows=clustering_method_rows,
+              clustering_method_columns=clustering_method_columns,
+              clustering_distance_rows=clustering_distance_rows,
+              clustering_distance_columns=clustering_distance_columns,
               ...) 
     } # }}}
   } else { # {{{
     hfun <- function(X, ...) {
-      Heatmap(X, col=cfun(64),
-              clustering_method_rows="ward",
-              clustering_method_columns="ward",
-              clustering_distance_rows="manhattan",
-              clustering_distance_columns="manhattan",
+      Heatmap(X, col=cfun(255),
+              clustering_method_rows=clustering_method_rows,
+              clustering_method_columns=clustering_method_columns,
+              clustering_distance_rows=clustering_distance_rows,
+              clustering_distance_columns=clustering_distance_columns,
               ...)
     } # }}}
   } # }}}
