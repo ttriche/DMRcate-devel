@@ -10,9 +10,13 @@
 #' @export
 getSimpleMethHeatMap <- function(x, k=100, asSNPs=F, binary=F, rotate=F, 
                                  clustering_method_rows="ward",
-                                 clustering_method_columns="ward",
-                                 clustering_distance_rows="binary",
-                                 clustering_distance_columns="binary",
+                                 clustering_method_columns="complete",
+                                 clustering_distance_rows=ifelse(binary, 
+                                                                 "binary", 
+                                                                 "manhattan"),
+                                 clustering_distance_columns=ifelse(binary, 
+                                                                   "binary", 
+                                                                   "manhattan"),
                                  ...) {
 
   if(is(x, "SummarizedExperiment") || is(x, "RangedSummarizedExperiment")){ #{{{
