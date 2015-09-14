@@ -1,7 +1,9 @@
-#' @param output DMRcate output (of class "dmrcate.output", as it happens)
-#' @param stepSize multiplier for scores. Typically if using 10**-y, leave at 1 
+#' @param output        DMRcate output (of class "dmrcate.output" as it happens)
+#' @param stepSize      multiplier for scores. Typically if using 10**-y, it's 1
+#' @param bridgeSize    bridge regions between significant DMRs up to this size
+#' @param bridgeP       don't bridge gaps with adjusted p-values less than this
 #'
-getDMRdepth <- function(output, stepSize=1, ...) { 
+getDMRdepth <- function(output, stepSize=1, bridgeSize=2000, bridgeP=1e-2, ...){
 
   stopifnot(class(output) == "dmrcate.output")
 
@@ -51,6 +53,38 @@ getDMRdepth <- function(output, stepSize=1, ...) {
     depths <- sort(unlist(depths))
   }
   depths$score <- depths$score * stepSize
+
+  if (bridgeSize > 0) {
+    message("Need more testing of gap-bridging code...")
+    consider <- which(abs(depths$score) >= abs(log10(bridgeP)))
+    d2n <- distanceToNearest(depths)
+    keepQ <- which(queryHits(d2n) %in% consider)
+    keepS <- which(subjectHits(d2n) %in% consider) 
+    d2n <- d2n[ intersect(keepQ, keepS) ]
+    d2n <- d2n[ which(mcols(d2n)$distance <= bridgeSize) ]
+    mcols(d2n)$sign1 <- sign(depths$score[queryHits(d2n)])
+    mcols(d2n)$sign2 <- sign(depths$score[subjectHits(d2n)])
+    d2n <- d2n[which(mcols(d2n)$sign1 == mcols(d2n)$sign2)]
+    qh <- queryHits(d2n)
+    sh <- subjectHits(d2n)
+    dupe <- rep(FALSE, length(qh))
+    for (i in seq_along(sh)) if (i > 1 && qh[i - 1] == sh[i]) dupe[i] <- TRUE
+    d2n <- d2n[!dupe]
+    if (length(d2n) > 0) {
+      message("Bridging ", length(d2n), " eligible sets of DMRs...")
+      bridgeMe <- data.frame(qh=queryHits(d2n), sh=subjectHits(d2n))
+      anchors <- apply(bridgeMe, 1, function(x) depths[c(x[["qh"]], x[["sh"]])])
+      bridges <- do.call(c,
+                       lapply(anchors, function(x) 
+                              GRanges(unique(seqnames(x)),
+                                      IRanges(min(end(x)),
+                                              max(start(x))),
+                                      score=median(score(x)))))
+      depths <- sort(c(depths, bridges))
+      message("...done.")
+    }
+  }
+
   return(depths)
 
 }
