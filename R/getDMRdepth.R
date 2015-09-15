@@ -77,8 +77,8 @@ getDMRdepth <- function(output, stepSize=1, bridgeSize=2000, bridgeP=1e-2, ...){
       bridges <- do.call(c,
                        lapply(anchors, function(x) 
                               GRanges(unique(seqnames(x)),
-                                      IRanges(min(end(x)),
-                                              max(start(x))),
+                                      IRanges(min(end(x))+ 1,
+                                              max(start(x)) - 1),
                                       score=median(score(x)))))
       depths <- sort(c(depths, bridges))
       message("...done.")
