@@ -8,6 +8,9 @@
 #' 
 collapseMatrix <- function(x, z, fn, impute=TRUE) {
   fn <- selectMethod(fn, class(x))
-  if (any(is.na(x)) && impute == TRUE) x <- impute.knn(x)$data
+  if (any(is.na(x)) && impute == TRUE) {
+    set.seed(1234)
+    x <- impute.knn(x)$data
+  }
   do.call(rbind, lapply(z, function(w) fn(x[w, , drop=F])))
 }

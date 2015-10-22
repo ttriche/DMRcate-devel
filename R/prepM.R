@@ -22,6 +22,7 @@ prepM <- function(M, cutoff=10) {
   ## impute NAs via k-NN
   if (any(is.na(M))) {
     message("Imputing NAs...")
+    set.seed(1234)
     M <- impute.knn(M)$data
   }
   return(M)

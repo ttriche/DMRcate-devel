@@ -10,6 +10,7 @@ fitByCpG <- function(x, designOrSurv, what=c('linear','cox','logistic')) {
     xx <- getM(x)
     if (any(is.na(xx))) {
       require(impute)
+      set.seed(1234)
       xx <- impute.knn(xx)$data
     }
     fit <- lmFit(xx, design)
