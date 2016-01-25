@@ -1,8 +1,11 @@
+#' function to allow "piling up" differentially methylated region significance
+#'
 #' @param output        DMRcate output (of class "dmrcate.output" as it happens)
 #' @param stepSize      multiplier for scores. Typically if using 10**-y, it's 1
 #' @param bridgeSize    bridge regions between significant DMRs up to this size
 #' @param bridgeP       don't bridge gaps with adjusted p-values less than this
 #'
+#' @export
 getDMRdepth <- function(output, stepSize=1, bridgeSize=2000, bridgeP=1e-2, ...){
 
   stopifnot(class(output) == "dmrcate.output")

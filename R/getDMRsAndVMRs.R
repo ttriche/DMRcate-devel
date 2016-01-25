@@ -4,13 +4,13 @@
 #' @param design      design matrix (for limma) or Surv object/matrix (for Cox)
 #' @param contrasts   apply contrasts to e.g. paired samples? (only for limma)
 #' @param cont.matrix if contrasts=T, supply a contrast matrix here
-#' @param coef        for which column of the design matrix shall we get DMRs?
+#' @param coef        column of the design matrix to fit DMRs (or "all")?
 #' @param pcutoff     p-value cutoff; if not specified, step from 10**-1:10**-8
 #' @param betacutoff  DMRs must have at least this great a maxbetaFC difference
 #' @param p.adjust.method   how to control the FDR, default is limma-style
 #' @param what        (not used yet) whether to use limma or Cox PH to tag DMRs
 #'
-getDMRs <- function(x, design=NULL, contrasts=F, cont.matrix=NULL, 
+getDMRs <- function(x, design=NULL, contrasts=FALSE, cont.matrix=NULL, 
                     coef=2, pcutoff=NULL, betacutoff=0.1, 
                     p.adjust.method="limma", what=c("limma", "cox"), ...) {
 
@@ -27,6 +27,7 @@ getDMRs <- function(x, design=NULL, contrasts=F, cont.matrix=NULL,
   if (is(x, "SummarizedExperiment") || is(x, "RangedSummarizedExperiment")) {
     x <- prepMvals(x) ## would rather internalize its rowRanges within dmrcate
   }
+
   if (is.null(design)) {
     if ((is(x,"SummarizedExperiment") || is(x,"RangedSummarizedExperiment")) &&
         ("design" %in% names(exptData(x)) || "design" %in% names(metadata(x)))){
@@ -36,14 +37,27 @@ getDMRs <- function(x, design=NULL, contrasts=F, cont.matrix=NULL,
       stop("You need a design matrix (perhaps metadata(x)$design) to call DMRs")
     }
   }
-  message("Annotating individual CpGs...")
-  DMRannot <- switch(what, 
-                     limma=cpg.annotate(x, design=design, coef=coef),
-                     cox=cox.annotate(x, Surv(x$OS, x$OSevent)))
 
-  message("Demarcating significant regions...")
-  dmrcate(DMRannot, pcutoff=pcutoff, betacutoff=betacutoff, 
-          p.adjust.method=p.adjust.method, ...)
+  # recurse, if requested to fit all coefs... FIXME: write fast cpg.annotate()
+  if (coef == "all") { # hack 
+    # remember to add: cpgannot <- annotateForMultiDMRs(x, design=design)
+    lapply(seq_len(ncol(design))[-1],
+           function(y) getDMRs(x, design=design, contrasts=contrasts,
+                               cont.matrix=cont.matrix, coef=y, pcutoff=pcutoff,
+                               betacutoff=betacutoff, # cpgannot=cpgannot,
+                               p.adjust.method=p.adjust.method, what=what, 
+                               ...))
+    # return DMRs for all columns
+  } else { 
+    message("Annotating individual CpGs...")
+    DMRannot <- switch(what, 
+                       limma=cpg.annotate(x, design=design, coef=coef),
+                       cox=cox.annotate(x, Surv(x$OS, x$OSevent)))
+
+    message("Demarcating significant regions...")
+    dmrcate(DMRannot, pcutoff=pcutoff, betacutoff=betacutoff, 
+            p.adjust.method=p.adjust.method, ...)
+  }
 }
 
 getVMRs <- function(x, pcutoff=0.1, ...) 
@@ -57,6 +71,6 @@ getVMRs <- function(x, pcutoff=0.1, ...)
 
 getDMRsAndVMRs <- function(x, design=NULL, contrasts=F, 
                            cont.matrix=NULL, coef=2, ...){
-  mvals.x <- prepMvals(x)
+  mvals.x <- prepMvals(x) # don't impute twice (or more)
   list(DMRs=getDMRs(mvals.x, design, coef, ...), VMRs=getVMRs(mvals.x, ...))
 }

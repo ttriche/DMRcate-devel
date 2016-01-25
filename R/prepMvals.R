@@ -9,8 +9,7 @@
 #' @return              A matrix of tidied and truncated M- or beta-values
 #'
 prepMvals <- function(grset, cutoff=10, returnBetas=FALSE) { 
-
-CpGs <- grep("^cg", rownames(grset)) # Getting the row location of all the CpG dinucleotides
+  CpGs <- grep("^cg", rownames(grset)) # Get location of all CpG dinucleotides
   if (is(grset, "RangedSummarizedExperiment")) {
     xx <- prepM(rmSNPandCH(logit2(assays(grset)$Beta)[CpGs, ]))
   } else { 
@@ -18,5 +17,4 @@ CpGs <- grep("^cg", rownames(grset)) # Getting the row location of all the CpG d
   }
   if (returnBetas == TRUE) return(ilogit2(xx))
   else return(xx)
-        
 }

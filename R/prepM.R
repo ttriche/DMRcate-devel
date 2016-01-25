@@ -9,10 +9,11 @@
 #' 
 prepM <- function(M, cutoff=10) {
  
-  if (is(M, "SummarizedExperiment")) {
-    if (is(M, "RangedSummarizedExperiment")) M <- logit2(assays(M)$Beta)
+  if (is(M, "RangedSummarizedExperiment")) {
     if (is(M, "GenomicRatioSet")) M <- getM(M) 
-    else M <- -1 * assays(M)$exprs ## HELP data 
+    else M <- logit2(assays(M)$Beta) # just in case
+  } else if (is(M, "SummarizedExperiment")) {
+    M <- -1 * assays(M)$exprs ## HELP data 
   }
 
   ## get rid of +/-Inf cells
