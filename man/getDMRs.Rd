@@ -4,8 +4,8 @@
 \alias{getDMRs}
 \title{omnibus DMR finder starting from a m-values and a design/Surv matrix}
 \usage{
-getDMRs(x, design = NULL, contrasts = F, cont.matrix = NULL, coef = 2,
-  pcutoff = NULL, betacutoff = 0.1, p.adjust.method = "limma",
+getDMRs(x, design = NULL, contrasts = FALSE, cont.matrix = NULL,
+  coef = 2, pcutoff = NULL, betacutoff = 0.1, p.adjust.method = "limma",
   what = c("limma", "cox"), ...)
 }
 \arguments{
@@ -17,7 +17,7 @@ getDMRs(x, design = NULL, contrasts = F, cont.matrix = NULL, coef = 2,
 
 \item{cont.matrix}{if contrasts=T, supply a contrast matrix here}
 
-\item{coef}{for which column of the design matrix shall we get DMRs?}
+\item{coef}{column of the design matrix to fit DMRs (or "all")?}
 
 \item{pcutoff}{p-value cutoff; if not specified, step from 10**-1:10**-8}
 

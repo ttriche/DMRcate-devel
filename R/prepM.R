@@ -10,8 +10,11 @@
 prepM <- function(M, cutoff=10) {
  
   if (is(M, "RangedSummarizedExperiment")) {
-    if (is(M, "GenomicRatioSet")) M <- getM(M) 
-    else M <- logit2(assays(M)$Beta) # just in case
+    if (is(M, "GenomicRatioSet") | is(M, "GenomicMethylSet")) {
+      M <- getM(M) 
+    } else {
+      M <- logit2(assays(M)$Beta) # just in case
+    }
   } else if (is(M, "SummarizedExperiment")) {
     M <- -1 * assays(M)$exprs ## HELP data 
   }

@@ -10,11 +10,7 @@
 #'
 prepMvals <- function(grset, cutoff=10, returnBetas=FALSE) { 
   CpGs <- grep("^cg", rownames(grset)) # Get location of all CpG dinucleotides
-  if (is(grset, "RangedSummarizedExperiment")) {
-    xx <- prepM(rmSNPandCH(logit2(assays(grset)$Beta)[CpGs, ]))
-  } else { 
-    xx <- prepM(rmSNPandCH(getM(grset)[CpGs, ]))
-  }
+  xx <- prepM(rmSNPandCH(as.matrix(getM(grset)[CpGs, ])))
   if (returnBetas == TRUE) return(ilogit2(xx))
   else return(xx)
 }
