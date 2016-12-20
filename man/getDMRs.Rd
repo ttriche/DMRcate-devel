@@ -5,8 +5,8 @@
 \title{omnibus DMR finder starting from a m-values and a design/Surv matrix}
 \usage{
 getDMRs(x, design = NULL, contrasts = FALSE, cont.matrix = NULL,
-  coef = 2, pcutoff = NULL, betacutoff = 0.1, p.adjust.method = "limma",
-  what = c("limma", "cox"), ...)
+  coef = 2, pcutoff = NULL, betacutoff = 0.1, keep.raw.DMLs = TRUE,
+  p.adjust.method = "limma", what = c("limma", "cox"), ...)
 }
 \arguments{
 \item{x}{matrix of M-values or SummarizedExperiment-derived object}
@@ -26,6 +26,9 @@ getDMRs(x, design = NULL, contrasts = FALSE, cont.matrix = NULL,
 \item{p.adjust.method}{how to control the FDR, default is limma-style}
 
 \item{what}{(not used yet) whether to use limma or Cox PH to tag DMRs}
+}
+\value{
+an object of type dmrcate.output
 }
 \description{
 omnibus DMR finder starting from a m-values and a design/Surv matrix

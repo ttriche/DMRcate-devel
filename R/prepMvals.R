@@ -8,6 +8,7 @@
 #' 
 #' @return              A matrix of tidied and truncated M- or beta-values
 #'
+#' @export
 prepMvals <- function(grset, cutoff=10, returnBetas=FALSE) { 
   CpGs <- grep("^cg", rownames(grset)) # Get location of all CpG dinucleotides
   xx <- prepM(rmSNPandCH(as.matrix(getM(grset)[CpGs, ])))

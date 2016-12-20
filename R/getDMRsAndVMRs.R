@@ -10,17 +10,22 @@
 #' @param p.adjust.method   how to control the FDR, default is limma-style
 #' @param what        (not used yet) whether to use limma or Cox PH to tag DMRs
 #'
+#' @return            an object of type dmrcate.output 
+#' 
+#' @export
 getDMRs <- function(x, design=NULL, contrasts=FALSE, cont.matrix=NULL, 
-                    coef=2, pcutoff=NULL, betacutoff=0.1, 
+                    coef=2, pcutoff=NULL, betacutoff=0.1, keep.raw.DMLs=TRUE, 
                     p.adjust.method="limma", what=c("limma", "cox"), ...) {
 
   ## support for Cox PH is coming:
   what <- tolower(match.arg(what))
 
-  if (what == "cox") 
+  if (what == "cox") {
     stop("Cox regression DMRs are not (yet) supported.")
-  if (what == "cox" && p.adjust.method == "limma")
+  }
+  if (what == "cox" && p.adjust.method == "limma") {
     stop("Cannot use limma-style p-value correction for Cox regression DRMs.")
+  }
 
   if (is.null(pcutoff)) pcutoff <- 10 ** (-1 * seq(1, 8)) ## nice for bigWigs
 
@@ -55,11 +60,21 @@ getDMRs <- function(x, design=NULL, contrasts=FALSE, cont.matrix=NULL,
                        cox=cox.annotate(x, Surv(x$OS, x$OSevent)))
 
     message("Demarcating significant regions...")
-    dmrcate(DMRannot, pcutoff=pcutoff, betacutoff=betacutoff, 
-            p.adjust.method=p.adjust.method, ...)
+    res <- dmrcate(DMRannot, pcutoff=pcutoff, betacutoff=betacutoff, 
+                   p.adjust.method=p.adjust.method, ...)
+    if (keep.raw.DMLs) res$DMLs <- DMRannot
+    return(res) 
   }
 }
 
+#' get variably methylated regions 
+#' 
+#' @param x           matrix of M-values or SummarizedExperiment-derived object
+#' @param pcutoff     p-value cutoff; if not specified, step from 10**-1:10**-8
+#'
+#' @return            an object of type dmrcate.output 
+#' 
+#' @export 
 getVMRs <- function(x, pcutoff=0.1, ...) 
 {
   if (is(x, "SummarizedExperiment") || is(x, "RangedSummarizedExperiment")) {
@@ -69,6 +84,17 @@ getVMRs <- function(x, pcutoff=0.1, ...)
   dmrcate(VMRannot, ...)
 }
 
+#' get both DMRs and VMRs from the same dataset 
+#' 
+#' @param x           matrix of M-values or SummarizedExperiment-derived object
+#' @param design      design matrix (for limma) or Surv object/matrix (for Cox)
+#' @param contrasts   apply contrasts to e.g. paired samples? (only for limma)
+#' @param cont.matrix if contrasts=T, supply a contrast matrix here
+#' @param coef        column of the design matrix to fit DMRs (or "all")?
+#'
+#' @return            an object of type dmrcate.output 
+#' 
+#' @export 
 getDMRsAndVMRs <- function(x, design=NULL, contrasts=F, 
                            cont.matrix=NULL, coef=2, ...){
   mvals.x <- prepMvals(x) # don't impute twice (or more)

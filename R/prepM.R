@@ -6,7 +6,8 @@
 #' @param cutoff  extremes at which to truncate M-values 
 #' 
 #' @return        a matrix 
-#' 
+#'
+#' @export
 prepM <- function(M, cutoff=10) {
  
   if (is(M, "RangedSummarizedExperiment")) {
