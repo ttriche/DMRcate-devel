@@ -47,7 +47,7 @@ collapseAtDMRs <- function(x, y,
     ## obtain the summarizer
     how <- match.arg(how)
     fnBy <- switch(how,
-                   "median"="matrixStats::colMedians",
+                   "median"="colMedians",
                    "mean"="colMeans",
                    "sum"="colSums",
                    "max"="colMaxs",
@@ -88,3 +88,5 @@ collapseAtDMRs <- function(x, y,
     return(res)
 
 }
+
+setGeneric("colMedians") # grr
