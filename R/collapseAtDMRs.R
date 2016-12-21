@@ -6,6 +6,9 @@
 #' @import minfi  
 #' @import impute
 #' @import GenomicRanges 
+#' @importFrom matrixStats colMedians
+#' @importFrom matrixStats colMaxs
+#' @importFrom matrixStats colMins
 #' 
 #' @param x       anything descended from a SummarizedExperiment
 #' @param y       differentially whatevered regions (DMRs) as a GRanges
@@ -44,7 +47,7 @@ collapseAtDMRs <- function(x, y,
     ## obtain the summarizer
     how <- match.arg(how)
     fnBy <- switch(how,
-                   "median"="colMedians",
+                   "median"="matrixStats::colMedians",
                    "mean"="colMeans",
                    "sum"="colSums",
                    "max"="colMaxs",

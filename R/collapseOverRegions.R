@@ -6,9 +6,10 @@
 #' @param impute    should missing values be imputed first? (TRUE) 
 #' 
 #' @return          an object not unlike x, but collapsed over the regions.
-#' 
-#' @export
 #'
+#' @importFrom matrixStats colMedians 
+#'
+#' @export
 collapseOverRegions <- function(x, regions, 
                                 how=c("median", "mean", "sum", "max", "min"),
                                 impute=TRUE) {
