@@ -3,6 +3,9 @@ cpg.annotate <- function (object, annotation = c(array = "IlluminaHumanMethylati
                           analysis.type = c("differential", "variability"), design, contrasts = FALSE, 
                           cont.matrix = NULL, coef, ...) 
 {
+
+  # this is bassackwards in so many ways
+  # why not use the damned GRset?
   stopifnot(is.matrix(object))
   analysis.type <- match.arg(analysis.type)
   switch(analysis.type, differential = {

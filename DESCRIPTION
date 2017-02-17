@@ -1,6 +1,6 @@
 Package: DMRcateExtras
 Title: Illumina 450K methylation array spatial analysis methods
-Version: 0.9.8
+Version: 0.9.9
 Date: 2017-02-17
 Author: Tim Triche, Jr.
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>

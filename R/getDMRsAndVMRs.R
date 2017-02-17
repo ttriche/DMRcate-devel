@@ -24,13 +24,22 @@ getDMRs <- function(x, design=NULL, contrasts=FALSE, cont.matrix=NULL,
     stop("Cox regression DMRs are not (yet) supported.")
   }
   if (what == "cox" && p.adjust.method == "limma") {
-    stop("Cannot use limma-style p-value correction for Cox regression DRMs.")
+    stop("Cannot use limma-style p-value correction for Cox regression DMRs.")
   }
 
   if (is.null(pcutoff)) pcutoff <- 10 ** (-1 * seq(1, 8)) ## nice for bigWigs
 
+  # try to auto-annotate if passed a GenomicRatioSet or similar
   if (is(x, "SummarizedExperiment") || is(x, "RangedSummarizedExperiment")) {
+    anno <- annotation(x)
     x <- prepMvals(x) ## would rather internalize its rowRanges within dmrcate
+    attr(x, "anno") <- anno
+  }
+
+  # if we CAN'T get it automatically:
+  if (is.null(attr(x, "anno"))) {
+    attr(x, "anno") <- c(array="IlluminaHumanMethylation450k", 
+                         annotation="ilmn12.hg19")
   }
 
   if (is.null(design)) {
@@ -56,9 +65,9 @@ getDMRs <- function(x, design=NULL, contrasts=FALSE, cont.matrix=NULL,
   } else { 
     message("Annotating individual CpGs...")
     DMRannot <- switch(what, 
-                       limma=cpg.annotate(x, design=design, coef=coef),
+                       limma=cpg.annotate(x, annotation=attr(x, "anno"),
+                                          design=design, coef=coef),
                        cox=cox.annotate(x, Surv(x$OS, x$OSevent)))
-
     message("Demarcating significant regions...")
     res <- dmrcate(DMRannot, pcutoff=pcutoff, betacutoff=betacutoff, 
                    p.adjust.method=p.adjust.method, ...)
