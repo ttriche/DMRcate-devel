@@ -1,10 +1,10 @@
 Package: DMRcateExtras
 Title: Illumina 450K methylation array spatial analysis methods
-Version: 0.9.7
+Version: 0.9.8
 Date: 2017-02-17
 Author: Tim Triche, Jr.
-Maintainer: Tim Triche, Jr. <tim.triche@usc.edu>
-Description: Additional bits for DMRcate (to be merged ASAP)
+Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
+Description: Additional bits for DMRcate (to be merged)
 Depends:
     R (>= 3.1.0),
     ks,
@@ -12,19 +12,18 @@ Depends:
     impute,
     qvalue,
     DMRcate,
+    rtracklayer,
     ComplexHeatmap
 Imports:
     methods,
     graphics,
     limma,
     minfi,
-    rtracklayer,
     matrixStats,
     scales
 biocViews: DifferentialMethylation, Microarray, MethylationArray, 
            DNAMethylation, OneChannel, TwoChannel, MultipleComparison
-Suggests:
-    knitr,
+Suggests: knitr
 License: file LICENSE
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
