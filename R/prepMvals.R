@@ -10,8 +10,7 @@
 #'
 #' @export
 prepMvals <- function(grset, cutoff=10, returnBetas=FALSE) { 
-  CpGs <- grep("^cg", rownames(grset)) # Get location of all CpG dinucleotides
-  xx <- prepM(rmSNPandCH(as.matrix(getM(grset)[CpGs, ])))
-  if (returnBetas == TRUE) return(ilogit2(xx))
+  xx <- prepM(getSafeProbes(getM(grset)))
+  if (returnBetas) return(ilogit2(xx))
   else return(xx)
 }

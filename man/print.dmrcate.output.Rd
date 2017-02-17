@@ -12,4 +12,3 @@
 \description{
 make it harder for me to shoot myself in the foot calling `some_DMR_results`
 }
-

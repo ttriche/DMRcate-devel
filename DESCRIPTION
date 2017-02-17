@@ -36,4 +36,4 @@ Suggests:
     coMET
 License: file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

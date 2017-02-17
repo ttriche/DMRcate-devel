@@ -17,4 +17,3 @@ a matrix
 \description{
 this is the core of prepMvals but omits sanity checking; useful if collapsed
 }
-

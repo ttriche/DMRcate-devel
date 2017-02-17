@@ -3,6 +3,8 @@
 #' @export 
 rmSNPandCH <- function(object, dist=2, mafcut=0.05, and=TRUE, rmcrosshyb=TRUE, rmXY=FALSE)
 {
+  message("Consider using getSafeProbes(object) instead.")
+
   stopifnot(is.matrix(object))
   dist <- as.integer(dist)
   stopifnot(0 <= mafcut & mafcut <= 1)

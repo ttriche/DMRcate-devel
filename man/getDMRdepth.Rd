@@ -18,4 +18,3 @@ getDMRdepth(output, stepSize = 1, bridgeSize = 2000, bridgeP = 0.01, ...)
 \description{
 function to allow "piling up" differentially methylated region significance
 }
-

@@ -19,4 +19,3 @@ a list of assays, having been transformed
 \description{
 collapse variable, and perhaps overlapping, rows of a matrix-like structure
 }
-

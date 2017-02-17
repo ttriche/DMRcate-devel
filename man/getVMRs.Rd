@@ -17,4 +17,3 @@ an object of type dmrcate.output
 \description{
 get variably methylated regions
 }
-

@@ -20,4 +20,3 @@ invisibly, the same thing as Heatmap(...)
 \description{
 pretty much what it says, except that (ironically) it calls ComplexHeatmap
 }
-

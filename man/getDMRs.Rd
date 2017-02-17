@@ -33,4 +33,3 @@ an object of type dmrcate.output
 \description{
 omnibus DMR finder starting from a m-values and a design/Surv matrix
 }
-

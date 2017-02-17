@@ -19,4 +19,3 @@ A matrix of tidied and truncated M- or beta-values
 \description{
 this is the recommended user-facing probe-name version
 }
-

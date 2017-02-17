@@ -24,4 +24,3 @@ an object of type dmrcate.output
 \description{
 get both DMRs and VMRs from the same dataset
 }
-

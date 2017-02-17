@@ -23,4 +23,3 @@ an object with same colData but with new rowRanges & assays
 \description{
 FIXME: let the user provide their own summarizer function
 }
-

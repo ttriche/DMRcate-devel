@@ -16,4 +16,3 @@ extractRanges(dmrcated, bySign = FALSE, atCutoff = NULL, ...)
 \description{
 extract GRanges corresponding to DMRs from the results of a dmrcate run
 }
-

@@ -15,4 +15,3 @@ summarized unscaled effect size estimates for the output
 \description{
 Create GRanges of imputed beta FC between samples to dump to a BigWig
 }
-

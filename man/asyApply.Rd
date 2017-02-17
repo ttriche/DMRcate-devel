@@ -17,4 +17,3 @@ a list of assays having been transformed
 \description{
 apply a function to each of the assays in an SE, efficiently
 }
-

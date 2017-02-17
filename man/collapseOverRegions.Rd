@@ -22,4 +22,3 @@ an object not unlike x, but collapsed over the regions.
 \description{
 alias to collapseAtDMRs
 }
-
