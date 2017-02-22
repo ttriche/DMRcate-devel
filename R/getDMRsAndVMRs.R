@@ -81,7 +81,7 @@ getDMRs <- function(x, design=NULL, contrasts=FALSE, cont.matrix=NULL,
 #' @param x           matrix of M-values or SummarizedExperiment-derived object
 #' @param pcutoff     p-value cutoff; if not specified, step from 10**-1:10**-8
 #'
-#' @return            an object of type dmrcate.output 
+#' @return            a GRanges 
 #' 
 #' @export 
 getVMRs <- function(x, pcutoff=0.1, ...) 
@@ -90,7 +90,8 @@ getVMRs <- function(x, pcutoff=0.1, ...)
     x <- prepMvals(x)
   }
   VMRannot <- cpg.annotate(x, analysis.type="variability", pcutoff=pcutoff)
-  dmrcate(VMRannot, ...)
+  res <- dmrcate(VMRannot, ...)
+  if(!is.null(res$results)) return(as(res$results$hg19coord, "GRanges"))
 }
 
 #' get both DMRs and VMRs from the same dataset 
