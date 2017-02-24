@@ -22,9 +22,7 @@ collapseAtDMRs <- function(x, y,
                            impute=TRUE) {
 
     ## check arguments
-    stopifnot(is(x, "SummarizedExperiment") || 
-              is(x, "RangedSummarizedExperiment"))
-    stopifnot(class(x) %in% c("SummarizedExperiment","GenomicRatioSet"))
+    stopifnot(is(x, "SummarizedExperiment"))
     if (class(y) == "dmrcate.output") y <- extractRanges(y)
     stopifnot(is(y, "GenomicRanges")) ## must be a GRanges
     if (is.null(names(y))) {
