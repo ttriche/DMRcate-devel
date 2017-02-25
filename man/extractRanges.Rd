@@ -2,7 +2,8 @@
 % Please edit documentation in R/extractRanges.R
 \name{extractRanges}
 \alias{extractRanges}
-\title{extract GRanges corresponding to DMRs from the results of a dmrcate run}
+\title{extract GRanges corresponding to DMRs from the results of a dmrcate run
+(no longer uses extractCoords since we can do as(character, "GRanges"))}
 \usage{
 extractRanges(dmrcated, bySign = FALSE, atCutoff = NULL, ...)
 }
@@ -15,4 +16,5 @@ extractRanges(dmrcated, bySign = FALSE, atCutoff = NULL, ...)
 }
 \description{
 extract GRanges corresponding to DMRs from the results of a dmrcate run
+(no longer uses extractCoords since we can do as(character, "GRanges"))
 }

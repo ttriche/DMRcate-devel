@@ -12,7 +12,7 @@ getVMRs(x, pcutoff = 0.1, ...)
 \item{pcutoff}{p-value cutoff; if not specified, step from 10**-1:10**-8}
 }
 \value{
-an object of type dmrcate.output
+a GRanges
 }
 \description{
 get variably methylated regions

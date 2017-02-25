@@ -13,6 +13,7 @@ getDMRbetas <- function(dmrcated, minDiff=.1, bySign=FALSE, withDMLs=FALSE,...){
   } else if (!is(dmrcated, "dmrcate.output")) {
     stop("Argument is not of class dmrcate.output; cannot process.")
   } else { 
+    data(seqinfo.hg19)
     gr <- as(dmrcated$results$hg19coord, "GRanges") 
     DMRs <- disjoin(gr)
     names(DMRs) <- as(DMRs, "character")
@@ -28,7 +29,9 @@ getDMRbetas <- function(dmrcated, minDiff=.1, bySign=FALSE, withDMLs=FALSE,...){
     DMRs$name <- names(DMRs) 
     DMRs$score <- sapply(split(probes$score, probes$DMR), median)[names(DMRs)]
     if (!is.null(minDiff)) DMRs <- subset(DMRs, abs(score) >= minDiff)
+    seqinfo(DMRs) <- seqinfo.hg19[seqlevels(DMRs)] 
     if (withDMLs == TRUE) { 
+      seqinfo(probes) <- seqinfo.hg19[seqlevels(probes)] 
       return(GRangesList(DMRs=DMRs, DMLs=probes))
     } else if (bySign == FALSE) {
       return(DMRs)
