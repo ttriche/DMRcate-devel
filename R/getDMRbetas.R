@@ -30,8 +30,10 @@ getDMRbetas <- function(dmrcated, minDiff=.1, bySign=FALSE, withDMLs=FALSE,...){
     DMRs$score <- sapply(split(probes$score, probes$DMR), median)[names(DMRs)]
     if (!is.null(minDiff)) DMRs <- subset(DMRs, abs(score) >= minDiff)
     seqinfo(DMRs) <- seqinfo.hg19[seqlevels(DMRs)] 
+    DMRs <- sort(DMRs) # proper order 
     if (withDMLs == TRUE) { 
       seqinfo(probes) <- seqinfo.hg19[seqlevels(probes)] 
+      probes <- sort(probes) # proper order 
       return(GRangesList(DMRs=DMRs, DMLs=probes))
     } else if (bySign == FALSE) {
       return(DMRs)
