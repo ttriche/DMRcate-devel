@@ -1,15 +1,13 @@
-extractCoords <- function(xx) 
-{ 
-  if(length(xx) > 1) {
-    res <- data.frame(t(sapply(as.character(xx), extractCoords)))
-    DataFrame(chrom=res$chrom, 
-              chromStart=as.numeric(as.character(res$chromStart)), 
-              chromEnd=as.numeric(as.character(res$chromEnd)))
-  } else {
-    coords <- strsplit(as.character(xx), ':')[[1]]
-    chrom <- coords[1]
-    chromStart <- as.numeric(strsplit(coords[2], '-')[[1]][1])
-    chromEnd <- as.numeric(strsplit(coords[2], '-')[[1]][2])
-    return(c(chrom=chrom, chromStart=chromStart, chromEnd=chromEnd))
-  }
+#' Extract coordinates (for transformation into GRanges; somewhat superfluous)
+#' Thank you to Xavier Pastor from Bioconductor mailing list for this patch
+#'
+#' @param  xx    a set of strings in the format chr:start-end[:strand]
+#' @return       a data.frame with columns chrom, chromStart, chromEnd
+#' @export
+extractCoords <- function(xx)
+{
+    coords <- sapply(xx, strsplit, '[:-]')
+    coords <- as.data.frame(do.call(rbind, coords), stringsAsFactors=F)
+    colnames(coords) <- c('chrom', 'chromStart', 'chromEnd')
+    return(coords)
 }
