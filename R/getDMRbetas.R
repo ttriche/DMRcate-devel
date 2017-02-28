@@ -27,7 +27,7 @@ getDMRbetas <- function(dmrcated, minDiff=.1, bySign=FALSE, withDMLs=FALSE,...){
     probes <- subsetByOverlaps(probes, DMRs)
     probes$DMR <- names(DMRs)[queryHits(findOverlaps(DMRs, probes))]
     DMRs$name <- names(DMRs) 
-    DMRs$score <- -1*sapply(split(probes$score,probes$DMR), median)[names(DMRs)]
+    DMRs$score <- sapply(split(probes$score, probes$DMR), median)[names(DMRs)]
     if (!is.null(minDiff)) DMRs <- subset(DMRs, abs(score) >= minDiff)
     seqinfo(DMRs) <- seqinfo.hg19[seqlevels(DMRs)] 
     DMRs <- sort(DMRs) # proper order 
