@@ -1,7 +1,7 @@
 Package: DMRcateExtras
 Title: Illumina Infinium methylation array spatial analysis methods
-Version: 0.9.15
-Date: 2017-06-13
+Version: 0.9.21
+Date: 2017-06-21
 Author: Tim Triche, Jr.
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: Additional bits for DMRcate (to be merged)
